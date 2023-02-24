@@ -8,10 +8,10 @@ import courseJavaCore.exception.IncorrectArgumentException;
 public abstract class Task implements Comparable<Task> {
    private static int idGenerator = 0; // счетчик
    private int id;
-   private static String title; // заголовок
-   private static String description; // описание
-   private static  LocalDateTime dateTime ; // время создания задачи
-   private static Type type; // тип задачи
+   private String title; // заголовок
+   private String description; // описание
+   private  LocalDateTime dateTime ; // время создания задачи
+   private  Type type; // тип задачи
 
     public Task(String title, String description, LocalDateTime dateTime, Type type) {
         id = idGenerator++;
@@ -32,7 +32,8 @@ public abstract class Task implements Comparable<Task> {
     public int getId() {
         return id;
     }
-    public static String getTitle() {
+
+    public String getTitle() {
         return title;
     }
 
@@ -44,7 +45,7 @@ public abstract class Task implements Comparable<Task> {
         }
     }
 
-    public static String getDescription() {
+    public String getDescription() {
         return description;
     }
 
@@ -56,11 +57,11 @@ public abstract class Task implements Comparable<Task> {
         }
     }
 
-    public static LocalDateTime getDateTime() {
+    public LocalDateTime getDateTime() {
         return dateTime;
     }
 
-    public static Type getType() {
+    public Type getType() {
         return type;
     }
 

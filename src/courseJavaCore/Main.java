@@ -6,15 +6,9 @@ import java.util.*;
 import java.time.LocalDateTime;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import static courseJavaCore.TaskService.printMenu;
-import static courseJavaCore.TaskService.addTask;
-import static courseJavaCore.TaskService.remove;
-import static courseJavaCore.TaskService.findTaskOnDate;
-import static courseJavaCore.TaskService.getTaskMapForDate;
-import static courseJavaCore.TaskService.ofDeletedTasks;
-import static courseJavaCore.TaskService.changeUpTitle;
-import static courseJavaCore.TaskService.changeUpDescription;
-import static courseJavaCore.TaskService.toFindTasks;
+
+import static courseJavaCore.TaskService.*;
+
 public class Main {
 
     public static void main(String[] args) {
