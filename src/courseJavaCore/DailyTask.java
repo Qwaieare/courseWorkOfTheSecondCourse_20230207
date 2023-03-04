@@ -3,19 +3,9 @@ import java.time.LocalDateTime;
 import java.time.LocalDate;
 
 public class DailyTask extends Task {
-    private static String frequencyDaily; // периодичность ежедневно
 
-    public DailyTask(String title, String description, LocalDateTime dateTime, Type type, String frequencyDaily) {
-        super(title, description, dateTime, type);
-        this.frequencyDaily = frequencyDaily;
-     }
-
-    public static String getFrequencyDaily() {
-        return frequencyDaily;
-    }
-
-    public static void setFrequencyDaily(String frequencyDaily) {
-        DailyTask.frequencyDaily = frequencyDaily;
+    public DailyTask(String title, String description, LocalDateTime dateTime, Type type, Frequency frequency) {
+        super(title, description, dateTime, type, frequency);
     }
 
     @Override
@@ -31,6 +21,6 @@ public class DailyTask extends Task {
 
     @Override
     public String toString() {
-        return super.toString() + frequencyDaily + " - ежедневная задача";
+        return super.toString() + " - ежедневная задача";
     }
 }

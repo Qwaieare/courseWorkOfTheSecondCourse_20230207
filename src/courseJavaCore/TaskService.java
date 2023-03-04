@@ -13,16 +13,18 @@ import java.time.format.DateTimeFormatter;
 public class TaskService {
 
 
-    public static Map<Integer, Task> taskMap = new HashMap<>();
-    public static Set<Task> setTask = new HashSet<>();
-    public static Task task;
+    private static Map<Integer, Task> taskMap = new HashMap<>();
+    private static Set<Task> setTask = new HashSet<>(); // для удаленных задач
+
+    private static Scanner scanner = new Scanner(System.in).useDelimiter("\\n");
+    private static Task task;
 
     private static Collection<Task> getALlTaskMap() { // коллекция задач
-        Collection<Task> values = taskMap.values();
+        Collection<Task> values = taskMap.values(); // вызван метод values() интерфейса Map, вернет Collection объектов значения, содержащихся в Map
         return values;
     }
 
-    static Collection<Task> getTaskMapForDate() { // для меню: список задач на указанную дату
+    static Collection<Task> getTaskMapForDate() { // список задач на указанную дату
         TreeSet<Task> taskForDate = new TreeSet<>();
         for (Task task : taskMap.values()) {
              if (task.appearsln(dateFor())) {
@@ -37,30 +39,30 @@ public class TaskService {
 
 
     static void printMenu() { // для меню:
+        System.out.println();
         System.out.println("Доступные команды: " +
                 "\n 1 - Добавить задачу " +
                 "\n 2 - Удалить задачу " +
                 "\n 3 - Получить задачу на указанную дату " +
                 "\n 4 - Показать список задач на указанную дату " +
                 "\n 5 - Показать удаленные задачи " +
-                "\n 6 - Обновить название задачи " +
-                "\n 7 - Обновить описание задачи " +
+                "\n 6 - Изменить название задачи " +
+                "\n 7 - Изменить описание задачи " +
                 "\n 8 - Найти задачу " +
                 "\n 0 - Выйти из меню");
     }
 
 
-    static void remove() throws IncorrectArgumentException {   // для меню: удалить задачу по id
-        System.out.println("Все задачи: ");
-        Scanner scanner = new Scanner(System.in);
-        for (Task task : getALlTaskMap()) {
+    static void remove(Scanner scanner) throws IncorrectArgumentException {   //  удалить задачу по id
+        System.out.println("Введите id задачи для удаления: ");
+         for (Task task : getALlTaskMap()) {
         }
         while (true) {
             try {
                 System.out.println("Выберите задачу для удаления: ");
                 String idline = scanner.nextLine();
                 int id = Integer.parseInt(idline);
-                TaskService.removeId(id, setTask);
+                TaskService.removeId(id);
                 break;
             } catch (NumberFormatException e) {
                 System.out.println("Не правильный id");
@@ -72,10 +74,10 @@ public class TaskService {
 
 
 
-    private static void removeId(int id, Set<Task> setTask) throws TaskNotFoundException {
+    private static void removeId(int id) throws TaskNotFoundException {
         if (taskMap.containsKey(id)) {
             taskMap.remove(id);
-            setTask.add(taskMap.remove(id));
+            TaskService.setTask.add(taskMap.remove(id));
         } else {
             throw new TaskNotFoundException("id не найден");
         }
@@ -93,7 +95,7 @@ public class TaskService {
     }
 
 
-    static void findTaskOnDate() throws TaskNotFoundException { // для меню: найти задачу по дате
+    static void findTaskOnDate() throws TaskNotFoundException { // найти задачу по дате
         for (Map.Entry<Integer, Task> taskMap : taskMap.entrySet()) {
             LocalDate localDate = taskMap.getValue().getDateTime().toLocalDate();
             if (localDate.equals(TaskService.dateFor())) {
@@ -107,137 +109,143 @@ public class TaskService {
 
 
     // п.1 - Добавить задачу
-     static void addTask() {
+     static void addTask() throws IncorrectArgumentException {
          while (true) {
-             Scanner scanId = new Scanner(System.in);
-             int id = scanId.nextInt();
-             TaskService.addId();
-             TaskService.selectType(taskMap);
              try {
-                 TaskService.selectFrequency(taskMap);
-             } catch (IncorrectArgumentException e) {
-                 throw new RuntimeException(e);
+                 int id = task.getId();
+                 taskMap.put(task.getId(), task);
+             } catch (NullPointerException e) {
+                 System.out.println();
              }
-
-             TaskService.comeUpTitle();
-             TaskService.comeUpDescription();
-             TaskService.askDateTime();
-
+             TaskService.selectType(scanner);
+             TaskService.selectFrequency(scanner);
+             TaskService.comeUpTitle(scanner);
+             TaskService.comeUpDescription(scanner);
+             TaskService.askDateTime(scanner);
+             try {
+                 System.out.println("Задача добавлена");
+                 System.out.println(task.toString());
+             } catch (NullPointerException e) {
+                 System.out.println();
+             }
          }
      }
 
-    private static void addId() { // добавить id
-        Scanner scanner = new Scanner(System.in);
-        int getId = scanner.nextInt();
-        System.out.println("Номер задачи по id = " + getId);
-    }
 
     public void add(Task task) {
         taskMap.put(task.getId(), task);
     }
 
 
-    private static void selectType(Map<Integer, Task> taskMap) {
-        System.out.println("Выберите задачу: \n 1 - Рабочая \n 2 - Личная");
-        Scanner scanner = new Scanner(System.in);
-        int id = scanner.nextInt();
-               switch (id) {
-            case 1:
-                taskMap.get(Type.WORK.hashCode());
-                System.out.println("Выбрана рабочая задача!");
-                break;
-            case 2:
-                taskMap.get(Type.PERSONAL.hashCode());
-                System.out.println("Выбрана личная задача!");
-                break;
-            default:
-                System.out.println("Нет такой задачи!");
-                break;
+    private static void selectType(Scanner scanner) {
+        try {
+            System.out.print("Выберите задачу: \n 1 - Рабочая \n 2 - Личная");
+            Type type;
+            int option = scanner.nextInt();
+            switch (option) {
+                case 1:
+                    type = Type.WORK;
+                    System.out.println("Выбрана рабочая задача!");
+                    break;
+                case 2:
+                    type = Type.PERSONAL;
+                    System.out.println("Выбрана личная задача!");
+                    break;
+                default:
+                    System.out.println("Нет такой задачи!");
+                    break;
+            }
+            task.getType();
+            taskMap.put(task.getId(), task);
+        } catch (NullPointerException e) {
+            System.out.println();
         }
     }
 
 
-    private static void selectFrequency(Map<Integer, Task> taskMap) throws IncorrectArgumentException {
-        System.out.println("Выберите повторяемость задачи: " +
-                "\n 1 – одноразовая " +
-                "\n 2 - ежедневно " +
-                "\n 3 - еженедельно " +
-                "\n 4 - каждый месяц " +
-                "\n 5 - каждый год ");
-        Scanner scanner = new Scanner(System.in);
-        int id = scanner.nextInt();
-            switch (id) {
+    private static void selectFrequency(Scanner scanner) {
+        try {
+            System.out.println("Выберите повторяемость задачи: " +
+                    "\n 1 – одноразовая " +
+                    "\n 2 - ежедневно " +
+                    "\n 3 - еженедельно " +
+                    "\n 4 - каждый месяц " +
+                    "\n 5 - каждый год ");
+            Frequency frequency;
+            int choice = scanner.nextInt();
+            switch (choice) {
                 case 1:
-                    taskMap.get(OneTimeTask.getFrequencyOnce());
+                    frequency = Frequency.FREQUENCY_ONCE;
                     System.out.println("Выбрана одноразовая задача!");
                     break;
                 case 2:
-                    taskMap.get(DailyTask.getFrequencyDaily());
+                    frequency = Frequency.FREQUENCY_DAILY;
                     System.out.println("Выбрана ежедневная задача!");
                     break;
                 case 3:
-                    taskMap.get(WeeklyTask.getFrequencyWeekly());
+                    frequency = Frequency.FREQUENCY_WEEKLY;
                     System.out.println("Выбрана еженедельная задача!");
                     break;
                 case 4:
-                    taskMap.get(MonthlyTask.getFrequencyMonthly());
+                    frequency = Frequency.FREQUENCY_MONTHLY;
                     System.out.println("Выбрана ежемесячная задача!");
                     break;
                 case 5:
-                    taskMap.get(YearlyTask.getFrequencyAnnually());
+                    frequency = Frequency.FREQUENCY_ANNUALLY;
                     System.out.println("Выбрана ежегодная задача!");
                     break;
                 default:
-                    System.out.println ("Пожалуйста, укажите повторяемость своей задачи!");
+                    System.out.println("Пожалуйста, укажите повторяемость своей задачи!");
                     break;
             }
-    }
-
-
-    private static void comeUpTitle() {
-        while (true) {
-        System.out.println("Добавьте название задачи!");
-        Scanner scan = new Scanner(System.in).useDelimiter("\\n");
-         String title = scan.next();
-        System.out.print("Введено название задачи: " + title );
-         Scanner scanId = new Scanner(System.in);
-         int id = scanId.nextInt();
-              try {
-               taskMap.putIfAbsent(id, task);
-               System.out.println(" id задачи: " + id + ", название задачи: " + task.getTitle());
-           } catch (InputMismatchException e) {
-                System.out.println("Введите название задачи");
-            } break;
+            task.getFrequency();
+            taskMap.put(task.getId(), task);
+        } catch (NullPointerException e) {
+            System.out.println();
         }
     }
 
 
 
-    private static void comeUpDescription() {
-        while (true) {
-            System.out.println("Добавьте краткое описание задачи!");
-            Scanner scanner = new Scanner(System.in).useDelimiter("\\n");
-            String description = scanner.next();
-            System.out.println("Введено краткое описание задачи!");
-            Scanner scanId = new Scanner(System.in);
-            int id = scanId.nextInt();
-            try {
-                taskMap.putIfAbsent(id, task);
-                System.out.println("Добавлено описание задачи: " + taskMap.get(id).getDescription() + description);
-            } catch (InputMismatchException e) {
-                System.out.println("Введите описание задачи");
-            }
+    private static void comeUpTitle(Scanner scanner) throws IncorrectArgumentException {
+        System.out.print("Добавьте название задачи! ");
+        String title = scanner.next();
+        if (title == null && title.isEmpty() && title.isBlank()) {
+            throw new IncorrectArgumentException("Вы не ввели название: ");
+        } else {
+            System.out.println("Название задачи: " + title);
+        }
+        try {
+            task.getTitle();
+            taskMap.put(task.getId(), task);
+        } catch (NullPointerException e) {
+            System.out.println();
+        }
+    }
+
+    private static void comeUpDescription(Scanner scanner) throws IncorrectArgumentException {
+        System.out.print("Добавьте краткое описание задачи! ");
+        String description = scanner.next();
+        if (description == null && description.isEmpty() && description.isBlank()) {
+            throw new IncorrectArgumentException("Вы не ввели описание задачи: ");
+        } else {
+            System.out.println("Введено краткое описание задачи: " + description);
+        }
+        try {
+           task.getDescription();
+        taskMap.put(task.getId(), task);
+        } catch (NullPointerException e) {
+            System.out.println();
         }
     }
 
 
      static void changeUpTitle() {
-         System.out.println("Чтобы изменить название задачи, найлите id: ");
-         Scanner scanId = new Scanner(System.in);
-         int id = scanId.nextInt();
+         System.out.print("Введите id, чтобы изменить название задачи: ");
+         int id = scanner.nextInt();
+         System.out.println("Введен id: " + id);
          try {
-             Scanner scanner = new Scanner(System.in).useDelimiter("\\n");
-             System.out.print("Измените название задачи: ");
+             System.out.print("Измените название: ");
              String title = scanner.next();
              taskMap.get(id).setTitle(title);
              System.out.println("Добавлено название задачи: " + id + taskMap.get(id).getTitle());
@@ -248,11 +256,10 @@ public class TaskService {
 
 
     static void changeUpDescription() {
-        System.out.println("Чтобы изменить описание задачи, найлите id: ");
-        Scanner scanId = new Scanner(System.in);
-        int id = scanId.nextInt();
+        System.out.print("Введите id, чтобы изменить описание задачи: ");
+        int id = scanner.nextInt();
+        System.out.println("Введен id: " + id);
         try {
-            Scanner scanner = new Scanner(System.in).useDelimiter("\\n");
             System.out.println("Измените описание задачи: ");
             String description = scanner.next();
             taskMap.get(id).setDescription(description);
@@ -281,18 +288,18 @@ public class TaskService {
     }
 
 
-    private static void askDateTime() {
-
+    private static void askDateTime(Scanner scanner) {
         while (true) {
             try {
-                Scanner scanner = new Scanner(System.in);
                 System.out.println("Заполните дату в указанном формате: " + "dd.MM.yyyy HH:mm");
-                String askDate = scanner.nextLine();
+                Scanner scanner1 = new Scanner(System.in);
+                String askDate = scanner1.nextLine();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
                 LocalDateTime dateTime = LocalDateTime.parse(askDate, formatter);
                 System.out.println("Введена дата:" + dateTime);
+                break;
             } catch (DateTimeParseException e) {
-                System.out.println("Дата введена в неправильном формате!");
+                System.out.println("Дата введена в неправильном формате! ");
             }
         }
      }

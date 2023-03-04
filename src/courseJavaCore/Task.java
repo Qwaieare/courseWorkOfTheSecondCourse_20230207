@@ -11,14 +11,16 @@ public abstract class Task implements Comparable<Task> {
    private String title; // заголовок
    private String description; // описание
    private  LocalDateTime dateTime ; // время создания задачи
-   private  Type type; // тип задачи
+   private final Type type; // тип задачи
+   private final Frequency frequency; // повторяемость задачи
 
-    public Task(String title, String description, LocalDateTime dateTime, Type type) {
+    public Task(String title, String description, LocalDateTime dateTime, Type type, Frequency frequency) {
         id = idGenerator++;
         this.title = title;
         this.description = description;
         this.dateTime = dateTime;
         this.type = type;
+        this.frequency = frequency;
     }
 
     public static int getIdGenerator() {
@@ -65,6 +67,10 @@ public abstract class Task implements Comparable<Task> {
         return type;
     }
 
+    public Frequency getFrequency() {
+        return frequency;
+    }
+
     // методы
     public abstract boolean appearsln(LocalDate localDate);
 
@@ -102,12 +108,15 @@ public abstract class Task implements Comparable<Task> {
 
     @Override
     public String toString() {
-        return "Зфдфча № " + id +
+        return "Задача № " + id +
                 ", название: " + title + '\'' +
                 ", краткое описание: " + description + '\'' +
                 ", дата: " + dateTime +
-                ", тип задачи: " + type;
+                ", тип задачи: " + type +
+                ", повторяемость задачи: " + frequency;
     }
+
+
 }
 
 

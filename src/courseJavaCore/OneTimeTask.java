@@ -3,19 +3,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class OneTimeTask extends Task {
-    private static String frequencyOnce; // периодичность разовая
-
-    public OneTimeTask(String title, String description, LocalDateTime dateTime, Type type, String frequencyOnce) {
-        super(title, description, dateTime, type);
-        this.frequencyOnce = frequencyOnce;
-    }
-
-    public static String getFrequencyOnce() {
-        return frequencyOnce;
-    }
-
-    public static void setFrequencyOnce(String frequencyOnce) {
-        OneTimeTask.frequencyOnce = frequencyOnce;
+    public OneTimeTask(String title, String description, LocalDateTime dateTime, Type type, Frequency frequency) {
+        super(title, description, dateTime, type, frequency);
     }
 
     @Override
@@ -30,7 +19,7 @@ public class OneTimeTask extends Task {
 
     @Override
     public String toString() {
-        return super.toString() + frequencyOnce + " - разовая задача";
+        return super.toString() + " - разовая задача";
     }
 
 }

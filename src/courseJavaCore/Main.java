@@ -15,22 +15,22 @@ public class Main {
         Task.currentLocalDateAndTime();
         TaskService service = new TaskService();
 
-        service.add(new OneTimeTask("AA", "AAAA", LocalDateTime.now(), Type.WORK, "frequencyOnce"));
-        service.add(new OneTimeTask("AB", "AABB", LocalDateTime.now(), Type.PERSONAL, "frequencyOnce"));
-        service.add(new DailyTask("AA", "AAAA", LocalDateTime.now(), Type.WORK, "frequencyDaily"));
-        service.add(new DailyTask("AB", "AABB", LocalDateTime.now(), Type.PERSONAL, "frequencyDaily"));
-        service.add(new WeeklyTask("AA", "AAAA", LocalDateTime.now(), Type.WORK, "frequencyWeekly"));
-        service.add(new WeeklyTask("AB", "AABB", LocalDateTime.now(), Type.PERSONAL, "frequencyWeekly"));
-        service.add(new MonthlyTask("AA", "AAAA", LocalDateTime.now(), Type.WORK, "frequencyMonthly"));
-        service.add(new MonthlyTask("AB", "AABB", LocalDateTime.now(), Type.PERSONAL, "frequencyMonthly"));
-        service.add(new YearlyTask("AA", "AAAA", LocalDateTime.now(), Type.WORK, "frequencyAnnually"));
-        service.add(new YearlyTask("AB", "AABB", LocalDateTime.now(), Type.PERSONAL, "frequencyAnnually"));
+        service.add(new OneTimeTask("AA", "AAAA", LocalDateTime.now(), Type.WORK, Frequency.FREQUENCY_ONCE));
+        service.add(new OneTimeTask("AB", "AABB", LocalDateTime.now(), Type.PERSONAL, Frequency.FREQUENCY_ONCE));
+        service.add(new DailyTask("AA", "AAAA", LocalDateTime.now(), Type.WORK, Frequency.FREQUENCY_DAILY));
+        service.add(new DailyTask("AB", "AABB", LocalDateTime.now(), Type.PERSONAL, Frequency.FREQUENCY_DAILY));
+        service.add(new WeeklyTask("AA", "AAAA", LocalDateTime.now(), Type.WORK, Frequency.FREQUENCY_WEEKLY));
+        service.add(new WeeklyTask("AB", "AABB", LocalDateTime.now(), Type.PERSONAL, Frequency.FREQUENCY_WEEKLY));
+        service.add(new MonthlyTask("AA", "AAAA", LocalDateTime.now(), Type.WORK, Frequency.FREQUENCY_MONTHLY));
+        service.add(new MonthlyTask("AB", "AABB", LocalDateTime.now(), Type.PERSONAL, Frequency.FREQUENCY_MONTHLY));
+        service.add(new YearlyTask("AA", "AAAA", LocalDateTime.now(), Type.WORK, Frequency.FREQUENCY_ANNUALLY));
+        service.add(new YearlyTask("AB", "AABB", LocalDateTime.now(), Type.PERSONAL, Frequency.FREQUENCY_ANNUALLY));
 
         try (Scanner scanner = new Scanner(System.in)) {
             label:
             while (true) {
+                System.out.println("Пожалйста, выберите команду из пунта меню: ");
                 printMenu();
-                System.out.println("Пожалйста, выберите команду из пунта меню. Будьте внимательны при выборе: ");
                 if (scanner.hasNext()) {
                     int menu = scanner.nextInt();
                     switch (menu) {
@@ -38,7 +38,7 @@ public class Main {
                             addTask();
                             break;
                         case 2:
-                            remove();
+                            remove(scanner);
                             break;
                         case 3:
                             findTaskOnDate();
@@ -60,21 +60,21 @@ public class Main {
                             break;
                         case 0:
                             break label;
-                        default:
-                            System.out.println("Пожалуйста, начните сначала!");
-                    }
+                }
                 } else {
-                        scanner.next();
+                    scanner.next();
                     System.out.println("Выберите команды меню: ");
                 }
             }
+            System.out.println("***Итоговый список задач***");
+
         } catch (TaskNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IncorrectArgumentException e) {
             throw new RuntimeException(e);
+        } catch (NullPointerException e) {
+            throw new RuntimeException(e);
         }
-
-
     }
   }
 

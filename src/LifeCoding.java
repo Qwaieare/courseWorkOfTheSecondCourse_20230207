@@ -9,7 +9,7 @@ public class LifeCoding {
         System.out.println("Билет №17");
         System.out.println("Задача на лайв-кодинг - 5");
 
-        System.out.println("Введите слово - ротор"); // введите слово палиндром - ротор, для выполнения программы
+        System.out.println("Введите слово:"); // введите слово палиндром - ротор, для выполнения программы
         Scanner scanner = new Scanner(System.in);
         String word;
         word = scanner.nextLine().toLowerCase();
@@ -46,8 +46,29 @@ public class LifeCoding {
         for(Map.Entry qurentMe2: keyValue.entrySet()) {
             System.out.println("Ключ это: " + qurentMe2.getKey() + " Значение это: " + qurentMe2.getValue());
         }
-    }
 
+        System.out.println();
+        System.out.println("Билет №17");
+        System.out.println("Задача на лайв-кодинг - 5 - другой вариант");
+
+        System.out.print("Введите слово: "); // введите слово кадрабардак
+        Scanner scanner1 = new Scanner(System.in);
+        String word1 = scanner1.nextLine();
+        int length = word1.length();
+        boolean isPalindrome = true;
+        for(int i = 0; i < length; i++)
+        {
+            if(word1.charAt(i) != word1.charAt(length-1-i)) {
+                System.out.println("Слово не палиндром.");
+                isPalindrome = false;
+                break;
+            }
+        }
+        if(isPalindrome) {
+            System.out.println("Слово палиндром.");
+        }
+
+    }
 
 }
 

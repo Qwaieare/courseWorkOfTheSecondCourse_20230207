@@ -3,19 +3,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class MonthlyTask extends Task {
-    private static String frequencyMonthly; // периодичность ежемесячно
 
-    public MonthlyTask(String title, String description, LocalDateTime dateTime, Type type, String frequencyMonthly) {
-        super(title, description, dateTime, type);
-        this.frequencyMonthly = frequencyMonthly;
-    }
-
-    public static String getFrequencyMonthly() {
-        return frequencyMonthly;
-    }
-
-    public static void setFrequencyMonthly(String frequencyMonthly) {
-        MonthlyTask.frequencyMonthly = frequencyMonthly;
+    public MonthlyTask(String title, String description, LocalDateTime dateTime, Type type, Frequency frequency) {
+        super(title, description, dateTime, type, frequency);
     }
 
     @Override
@@ -32,6 +22,6 @@ public class MonthlyTask extends Task {
 
     @Override
     public String toString() {
-        return super.toString() + frequencyMonthly + " - ежемесячная задача";
+        return super.toString() + " - ежемесячная задача";
     }
 }
