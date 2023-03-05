@@ -1,4 +1,6 @@
 package courseJavaCore;
+import java.awt.*;
+import java.security.Key;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
@@ -13,11 +15,18 @@ import java.time.format.DateTimeFormatter;
 public class TaskService {
 
 
-    private static Map<Integer, Task> taskMap = new HashMap<>();
+   public static Map<Integer, Task> taskMap = new HashMap<>();
     private static Set<Task> setTask = new HashSet<>(); // для удаленных задач
 
     private static Scanner scanner = new Scanner(System.in).useDelimiter("\\n");
     private static Task task;
+
+
+    private static void MM(int id) {
+    Task task = taskMap.get(id);
+        setTask.add(task);
+        taskMap.remove(id);
+    }
 
     private static Collection<Task> getALlTaskMap() { // коллекция задач
         Collection<Task> values = taskMap.values(); // вызван метод values() интерфейса Map, вернет Collection объектов значения, содержащихся в Map
@@ -72,8 +81,6 @@ public class TaskService {
         }
     }
 
-
-
     private static void removeId(int id) throws TaskNotFoundException {
         if (taskMap.containsKey(id)) {
             taskMap.remove(id);
@@ -95,15 +102,9 @@ public class TaskService {
     }
 
 
-    static void findTaskOnDate() throws TaskNotFoundException { // найти задачу по дате
+    static void findTaskOnDate() { // задачи: ключи и значения
         for (Map.Entry<Integer, Task> taskMap : taskMap.entrySet()) {
-            LocalDate localDate = taskMap.getValue().getDateTime().toLocalDate();
-            if (localDate.equals(TaskService.dateFor())) {
-                System.out.println(taskMap.getKey() + " " + taskMap.getValue());
-            }
-            if (localDate.isAfter(localDate) && taskMap.getValue().appearsln(localDate)) {
-                System.out.println(taskMap.getKey() + " " + taskMap.getValue());
-            } else throw new TaskNotFoundException("Нет задачи по выбранной дате: ");
+            System.out.println(taskMap.getKey()+ " " + taskMap.getValue());
         }
     }
 
@@ -130,7 +131,6 @@ public class TaskService {
              }
          }
      }
-
 
     public void add(Task task) {
         taskMap.put(task.getId(), task);

@@ -6,6 +6,10 @@ import java.util.*;
 import java.time.LocalDateTime;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.function.BiConsumer;
+
 
 import static courseJavaCore.TaskService.*;
 
@@ -15,17 +19,46 @@ public class Main {
         Task.currentLocalDateAndTime();
         TaskService service = new TaskService();
 
-        service.add(new OneTimeTask("AA", "AAAA", LocalDateTime.now(), Type.WORK, Frequency.FREQUENCY_ONCE));
-        service.add(new OneTimeTask("AB", "AABB", LocalDateTime.now(), Type.PERSONAL, Frequency.FREQUENCY_ONCE));
-        service.add(new DailyTask("AA", "AAAA", LocalDateTime.now(), Type.WORK, Frequency.FREQUENCY_DAILY));
-        service.add(new DailyTask("AB", "AABB", LocalDateTime.now(), Type.PERSONAL, Frequency.FREQUENCY_DAILY));
-        service.add(new WeeklyTask("AA", "AAAA", LocalDateTime.now(), Type.WORK, Frequency.FREQUENCY_WEEKLY));
-        service.add(new WeeklyTask("AB", "AABB", LocalDateTime.now(), Type.PERSONAL, Frequency.FREQUENCY_WEEKLY));
-        service.add(new MonthlyTask("AA", "AAAA", LocalDateTime.now(), Type.WORK, Frequency.FREQUENCY_MONTHLY));
-        service.add(new MonthlyTask("AB", "AABB", LocalDateTime.now(), Type.PERSONAL, Frequency.FREQUENCY_MONTHLY));
-        service.add(new YearlyTask("AA", "AAAA", LocalDateTime.now(), Type.WORK, Frequency.FREQUENCY_ANNUALLY));
-        service.add(new YearlyTask("AB", "AABB", LocalDateTime.now(), Type.PERSONAL, Frequency.FREQUENCY_ANNUALLY));
+        OneTimeTask onrTask1 = new OneTimeTask("AA", "AAAA", LocalDateTime.now(), Type.WORK, Frequency.FREQUENCY_ONCE);
+        OneTimeTask onrTask2 = new OneTimeTask("AB", "AABB", LocalDateTime.now(), Type.PERSONAL, Frequency.FREQUENCY_ONCE);
+        DailyTask dailyTask1 = new DailyTask("AA", "AAAA", LocalDateTime.now(), Type.WORK, Frequency.FREQUENCY_DAILY);
+        DailyTask dailyTask2 = new DailyTask("AB", "AABB", LocalDateTime.now(), Type.PERSONAL, Frequency.FREQUENCY_DAILY);
+        WeeklyTask weeklyTask1 = new WeeklyTask("AA", "AAAA", LocalDateTime.now(), Type.WORK, Frequency.FREQUENCY_WEEKLY);
+        WeeklyTask weeklyTask2 =new WeeklyTask("AB", "AABB", LocalDateTime.now(), Type.PERSONAL, Frequency.FREQUENCY_WEEKLY);
+        MonthlyTask monthlyTask1 = new MonthlyTask("AA", "AAAA", LocalDateTime.now(), Type.WORK, Frequency.FREQUENCY_MONTHLY);
+        MonthlyTask monthlyTask2 = new MonthlyTask("AB", "AABB", LocalDateTime.now(), Type.PERSONAL, Frequency.FREQUENCY_MONTHLY);
+        YearlyTask yearlyTask1 = new YearlyTask("AA", "AAAA", LocalDateTime.now(), Type.WORK, Frequency.FREQUENCY_ANNUALLY);
+        YearlyTask yearlyTask2 =  new YearlyTask("AB", "AABB", LocalDateTime.now(), Type.PERSONAL, Frequency.FREQUENCY_ANNUALLY);
 
+        System.out.println("Добавлены задачи в карту: ");
+        TaskService.taskMap.put(onrTask1.getId(), onrTask1);
+        TaskService.taskMap.put(onrTask2.getId(), onrTask2);
+        TaskService.taskMap.put(dailyTask1.getId(), dailyTask1);
+        TaskService.taskMap.put(dailyTask2.getId(), dailyTask2);
+        TaskService.taskMap.put(weeklyTask1.getId(), weeklyTask1);
+        TaskService.taskMap.put(weeklyTask2.getId(), weeklyTask2);
+        TaskService.taskMap.put(monthlyTask1.getId(), monthlyTask1);
+        TaskService.taskMap.put(monthlyTask2.getId(), monthlyTask2);
+        TaskService.taskMap.put(yearlyTask1.getId(), yearlyTask1);
+        TaskService.taskMap.put(yearlyTask2.getId(), yearlyTask2);
+        TaskService.findTaskOnDate(); // Вывод всех ключей и значений из карты
+        System.out.println();
+
+        TaskService.taskMap.remove(onrTask2.getId(), onrTask2);
+        TaskService.taskMap.remove(dailyTask2.getId(), dailyTask2);
+        TaskService.taskMap.remove(weeklyTask2.getId(), weeklyTask2);
+        TaskService.taskMap.remove(monthlyTask2.getId(), monthlyTask2);
+        TaskService.taskMap.remove(yearlyTask2.getId(), yearlyTask2);
+        System.out.println("Остались задачи на карте: ");
+        TaskService.findTaskOnDate(); // Вывод всех ключей и значений из карты
+        System.out.println();
+
+        Set<Integer> keys = TaskService.taskMap.keySet();
+        System.out.println("Ключи: " + keys );
+
+        // не собрала удаленные задачи
+
+        System.out.println();
         try (Scanner scanner = new Scanner(System.in)) {
             label:
             while (true) {
@@ -68,9 +101,8 @@ public class Main {
             }
             System.out.println("***Итоговый список задач***");
 
-        } catch (TaskNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IncorrectArgumentException e) {
+        }
+         catch (IncorrectArgumentException e) {
             throw new RuntimeException(e);
         } catch (NullPointerException e) {
             throw new RuntimeException(e);
