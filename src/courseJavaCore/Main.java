@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.function.BiConsumer;
+import java.time.LocalDate;
 
 
 import static courseJavaCore.TaskService.*;
@@ -74,7 +75,7 @@ public class Main {
                             remove(scanner);
                             break;
                         case 3:
-                            findTaskOnDate();
+                            getAllByDate(localDate);
                             break;
                         case 4:
                             getTaskMapForDate();
@@ -105,6 +106,9 @@ public class Main {
          catch (IncorrectArgumentException e) {
             throw new RuntimeException(e);
         } catch (NullPointerException e) {
+            throw new RuntimeException(e);
+        }
+        catch (TaskNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

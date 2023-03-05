@@ -20,13 +20,10 @@ public class TaskService {
 
     private static Scanner scanner = new Scanner(System.in).useDelimiter("\\n");
     private static Task task;
+    static LocalDate localDate;
 
 
-    private static void MM(int id) {
-    Task task = taskMap.get(id);
-        setTask.add(task);
-        taskMap.remove(id);
-    }
+
 
     private static Collection<Task> getALlTaskMap() { // коллекция задач
         Collection<Task> values = taskMap.values(); // вызван метод values() интерфейса Map, вернет Collection объектов значения, содержащихся в Map
@@ -45,6 +42,26 @@ public class TaskService {
         }
         return taskForDate;
     }
+
+    public static void getAllByDate(LocalDate localDate) throws TaskNotFoundException { // найти задачу на указанную дату
+        for (Map.Entry<Integer, Task> taskMap : taskMap.entrySet()) {
+            LocalDate date = taskMap.getValue().getDateTime().toLocalDate();
+            try {
+                if (localDate.equals(localDate)) {
+                    System.out.println(taskMap.getKey() + " " + taskMap.getValue());
+                }
+            } catch (NullPointerException e) {
+                System.out.println("Нет задачи по выбранной дате: ");
+            }
+                 if (localDate.isAfter(date) && taskMap.getValue().appearsln(localDate)) {
+                    System.out.println(taskMap.getKey() + " " + taskMap.getValue());
+                }
+            }
+        }
+
+
+
+
 
 
     static void printMenu() { // для меню:
@@ -99,6 +116,11 @@ public class TaskService {
         } else {
             System.out.println("В архиве нет удаленных задач");
         }
+    }
+    private static void MM(int id) { // удаленные задачи
+        Task task = taskMap.get(id);
+        setTask.add(task);
+        taskMap.remove(id);
     }
 
 
